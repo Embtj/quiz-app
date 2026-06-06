@@ -1,0 +1,84 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary-font: "Karla", sans-serif;
+  --secondary-font: "Inter", sans-serif;
+  --text-color: #293264;
+}
+
+body {
+  font-family: var(--primary-font);
+  color: var(--text-color);
+  background-color: #F5F7FB;
+  min-height: 100vh;
+}
+
+.app {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.content {
+  max-width: 550px;
+  margin: 0 auto;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* Blobs */
+
+.yellow-blob {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.blue-blob {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+/* Start Screen */
+
+.game-title {
+  font-size: 1.953rem;
+  font-weight: 700;
+}
+
+.game-description {
+  font-size: 1em;
+  margin: 1em 0 2em 0;
+}
+
+.start-btn {
+  background-color: #4D5B9E;
+  font-family: var(--secondary-font);
+  font-size: 1rem;
+  font-weight: 500;
+  color: #F5F7FB;
+  border: none;
+  border-radius: 15px;
+  padding: 18px 55px;
+  cursor: pointer;
+}
+
+.start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Quiz Screen */
+
+/* Result Screen */
