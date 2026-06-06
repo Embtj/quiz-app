@@ -1,10 +1,26 @@
-import React from 'react'
+import { useState } from 'react'
 import yellowBlob from "./assets/yellow-blob.svg"
 import blueBlob from "./assets/blue-blob.svg"
-import StartScreen from './components/StartScreen'
+import StartPage from './components/SartPage'
+import QuizPage from './components/QuizPage'
 
 export default function App() {
 
+  const PAGES = {
+    START: "start",
+    QUIZ: "quiz",
+  }
+
+  const [gameState, setGameState] = useState(PAGES.START)
+
+  function gameScreen() {
+    if (gameState === PAGES.START) {
+      return <StartPage onClick={() => setGameState(PAGES.QUIZ)} />
+    } 
+    if (gameState === PAGES.QUIZ) {
+      return <QuizPage />
+    }
+  }
   
 
   return (
@@ -12,7 +28,7 @@ export default function App() {
       <img src={blueBlob} className="blue-blob" alt="" />
       <img src={yellowBlob} className="yellow-blob" alt="" />
       <div className="content">
-        <StartScreen />
+        {gameScreen()}
       </div> 
     </div> 
   )

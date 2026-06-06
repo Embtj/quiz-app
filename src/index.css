@@ -62,23 +62,39 @@ body {
   margin: 1em 0 2em 0;
 }
 
-.start-btn {
+button {
   background-color: #4D5B9E;
   font-family: var(--secondary-font);
-  font-size: 1rem;
-  font-weight: 500;
   color: #F5F7FB;
   border: none;
-  border-radius: 15px;
-  padding: 18px 55px;
   cursor: pointer;
 }
 
-.start-btn:hover {
+button:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+.start-btn {
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 15px;
+  padding: 18px 55px;
+}
+
+
 /* Quiz Screen */
+
+.question {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.quiz-button {
+  border-radius: 10px;
+  font-size: 0.64rem;
+  font-weight: 600;
+  padding: 12px 20px;
+}
 
 /* Result Screen */
