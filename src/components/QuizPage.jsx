@@ -4,6 +4,8 @@ export default function QuizPage() {
 
   const [questions, setQuestions] = useState([])
 
+  
+
   function getQuestions() {
     fetch("https://opentdb.com/api.php?amount=5&type=multiple")
     .then(res => res.json())
@@ -17,9 +19,28 @@ export default function QuizPage() {
     getQuestions()
   }, [])
 
-  const questionElements = questions.map((question, index) => (
-    <p className="question" key={index}>{question.question}</p>
+
+  const formattedQuestions = questions.map(question => {
+    return {
+      question: question.question,
+      correct_answer: question.correct_answer,
+      answers: [
+        question.correct_answer,
+        ...question.incorrect_answers
+      ]
+    }
+  })
+
+  const questionElements = formattedQuestions.map((question, index) => (
+    <div key={index}>
+    <p className="question">{question.question}</p>
+    {question.answers.map((answer, index) => (
+      <button key={index}>{answer}</button>
+    ))}
+    </div>
   ))
+
+  
 
   return (
     <div>
