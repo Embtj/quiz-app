@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import he from "he"
 
 export default function QuizPage() {
 
@@ -21,13 +22,16 @@ export default function QuizPage() {
 
 
   const formattedQuestions = questions.map(question => {
+    const correct = he.decode(question.correct_answer)
+    
+    const incorrect = question.incorrect_answers.map(answer => 
+      he.decode(answer)
+    )
+
     return {
-      question: question.question,
-      correct_answer: question.correct_answer,
-      answers: [
-        question.correct_answer,
-        ...question.incorrect_answers
-      ]
+      question: he.decode(question.question),
+      correct_answer: correct,
+      answers: [correct, ...incorrect]
     }
   })
 
