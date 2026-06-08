@@ -27,7 +27,7 @@ export default function App() {
     <div className="app">
       <img src={blueBlob} className="blue-blob" alt="" />
       <img src={yellowBlob} className="yellow-blob" alt="" />
-      <div className="content">
+      <div className="container">
         {gameScreen()}
       </div> 
     </div> 

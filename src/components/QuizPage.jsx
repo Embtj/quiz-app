@@ -32,20 +32,22 @@ export default function QuizPage() {
   })
 
   const questionElements = formattedQuestions.map((question, index) => (
-    <div key={index}>
+    <div key={index} className="question-element">
     <p className="question">{question.question}</p>
-    {question.answers.map((answer, index) => (
-      <button key={index}>{answer}</button>
-    ))}
+    <div className="answers-container">
+      {question.answers.map((answer, index) => (
+        <button key={index} className="answers">{answer}</button>
+      ))}
+    </div>
     </div>
   ))
 
   
 
   return (
-    <div>
+    <div className="content">
       {questionElements}
-      <button className="quiz-button">Check answers</button>
+      <button className="btn quiz-button">Check answers</button>
     </div>
   )
 }
