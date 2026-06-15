@@ -81,6 +81,13 @@ export default function QuizPage() {
     </div>
   ))
 
+  function handleReset() {
+    setQuestions([])
+    setSelectedAnswers({})
+    setResults([])
+    getQuestions()
+  }
+
   return (
     <div className="content">
       {questionElements}
@@ -89,7 +96,7 @@ export default function QuizPage() {
         :
         <div className="score-container">
           <p className="score-text">You scored {score}/{questions.length} correct answers</p>
-          <button onClick={() => handleCheckAnswer()} className="btn score-button">Play again</button>
+          <button onClick={() => handleReset()} className="btn score-button">Play again</button>
         </div>
       }
     </div>
