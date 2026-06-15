@@ -123,7 +123,8 @@ button:hover {
   background-color: #D6DBF5;
 }
 
-.quiz-button {
+.quiz-button,
+.score-button {
   border-radius: 10px;
   font-size: 0.64rem;
   font-weight: 600;
@@ -131,3 +132,15 @@ button:hover {
 }
 
 /* Result Screen */
+
+.score-container {
+  display: flex;
+  align-items: center;
+  gap: 2em;
+}
+
+.score-text {
+  font-family: var(--secondary-font);
+  font-size: 0.8rem;
+  font-weight: 700;
+}

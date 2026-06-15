@@ -3,9 +3,15 @@ import he from "he"
 
 export default function QuizPage() {
 
+  // State
   const [questions, setQuestions] = useState([])
   const [selectedAnswers, setSelectedAnswers] = useState({})
+  const [results, setResults] = useState([])
 
+  // Derived
+  const score = results.filter(value => value === true).length
+
+  // Get data from api and format it
   function getQuestions() {
     fetch("https://opentdb.com/api.php?amount=5&type=multiple")
       .then(res => res.json())
@@ -44,15 +50,18 @@ export default function QuizPage() {
   }
 
   function handleCheckAnswer() {
+    const resultsArray = []
+
     questions.forEach((question, index) => {
       const chosenAnswer = question.answers[selectedAnswers[index]]
       const correctAnswer = question.correct_answer
       if (chosenAnswer === correctAnswer) {
-        console.log("Correct!")
+        resultsArray.push(true)
       } else {
-        console.log("Wrong!")
+        resultsArray.push(false)
       }
     })
+    setResults(resultsArray)
   }
 
   const questionElements = questions.map((question, questionIndex) => (
@@ -75,7 +84,14 @@ export default function QuizPage() {
   return (
     <div className="content">
       {questionElements}
-      <button onClick={() => handleCheckAnswer()} className="btn quiz-button">Check answers</button>
+      {results.length === 0 ? 
+        <button onClick={() => handleCheckAnswer()} className="btn quiz-button">Check answers</button>
+        :
+        <div className="score-container">
+          <p className="score-text">You scored {score}/{questions.length} correct answers</p>
+          <button onClick={() => handleCheckAnswer()} className="btn score-button">Play again</button>
+        </div>
+      }
     </div>
   )
 }
