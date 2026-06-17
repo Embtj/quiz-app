@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import yellowBlob from "./assets/yellow-blob.svg"
 import blueBlob from "./assets/blue-blob.svg"
-import StartPage from './components/SartPage'
+import StartPage from './components/StartPage'
 import QuizPage from './components/QuizPage'
 
 export default function App() {

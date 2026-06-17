@@ -123,6 +123,20 @@ button:hover {
   background-color: #D6DBF5;
 }
 
+.answers.correct {
+  background-color: #94D7A2;
+  border: none;
+}
+
+.answers.chosen-incorrect {
+  background-color: #F8BCBC;
+  opacity: 50%;
+}
+
+.answers.incorrect {
+  opacity: 50%;
+}
+
 .quiz-button,
 .score-button {
   border-radius: 10px;
