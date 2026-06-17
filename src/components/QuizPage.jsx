@@ -12,6 +12,17 @@ export default function QuizPage() {
   // Derived
   const score = results.filter(value => value === true).length
 
+  function shuffle(array) {
+    const shuffled = [...array]
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    }
+
+    return shuffled
+  }
+
   // Get data from api and format it
   function getQuestions() {
     fetch("https://opentdb.com/api.php?amount=5&type=multiple")
@@ -28,7 +39,7 @@ export default function QuizPage() {
           return {
             question: he.decode(question.question),
             correct_answer: correct,
-            answers: [correct, ...incorrect]
+            answers: shuffle([correct, ...incorrect])
           }
         })
         setQuestions(formattedQuestions)
@@ -81,6 +92,7 @@ export default function QuizPage() {
             <button
               key={answerIndex}
               className={answersClass}
+              disabled={results.length && answer !== question.correct_answer}
               onClick={() => handleSelectAnswer(questionIndex, answerIndex)}
             >
               {answer}
