@@ -8,6 +8,8 @@ export default function QuizPage() {
   const [questions, setQuestions] = useState([])
   const [selectedAnswers, setSelectedAnswers] = useState({})
   const [results, setResults] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
   // Derived
   const score = results.filter(value => value === true).length
@@ -24,26 +26,40 @@ export default function QuizPage() {
   }
 
   // Get data from api and format it
-  function getQuestions() {
-    fetch("https://opentdb.com/api.php?amount=5&type=multiple")
-      .then(res => res.json())
-      .then(data => {
-        console.log(data)
-        const formattedQuestions = data.results.map(question => {
-          const correct = he.decode(question.correct_answer)
+  async function getQuestions() {
+    try {
+      setLoading(true)
+      const res = await fetch("https://opentdb.com/api.php?amount=5&type=multiple")
 
-          const incorrect = question.incorrect_answers.map(answer =>
-            he.decode(answer)
-          )
+      if (res.status === 429) {
+        throw new Error("Too many requests, please wait a moment and try again")
+      }
 
-          return {
-            question: he.decode(question.question),
-            correct_answer: correct,
-            answers: shuffle([correct, ...incorrect])
-          }
-        })
-        setQuestions(formattedQuestions)
+      if (!res.ok) {
+        throw new Error("Something went wrong, please try again")
+      }
+
+      const data = await res.json()
+      console.log(data)
+      const formattedQuestions = data.results.map(question => {
+        const correct = he.decode(question.correct_answer)
+
+        const incorrect = question.incorrect_answers.map(answer =>
+          he.decode(answer)
+        )
+
+        return {
+          question: he.decode(question.question),
+          correct_answer: correct,
+          answers: shuffle([correct, ...incorrect])
+        }
       })
+      setQuestions(formattedQuestions)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -108,6 +124,23 @@ export default function QuizPage() {
     setSelectedAnswers({})
     setResults([])
     getQuestions()
+  }
+
+  if (loading) {
+    return <p aria-live="polite" className="loading-message content">Loading...</p>
+  }
+
+  if (error) {
+    return (
+      <div className="content">
+        <p aria-live="assertive" className="error-message">{error}</p>
+        <button onClick={() => {
+          setError(null)
+          getQuestions()
+        }}
+          className="btn score-button">Try again</button>
+      </div>
+    )
   }
 
   return (

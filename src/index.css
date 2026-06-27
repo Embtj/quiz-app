@@ -170,3 +170,15 @@ button:disabled:hover {
   font-size: 0.8rem;
   font-weight: 700;
 }
+
+.loading-message {
+  color: var(--text-color);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.error-message {
+  color: red;
+  font-weight: 700;
+  margin-bottom: 1em;
+}
