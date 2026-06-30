@@ -67,21 +67,21 @@ export default function QuizPage() {
   }, [])
 
 
-
-  function handleSelectAnswer(questionIndex, answerIndex) {
+  function handleSelectAnswer(questionIndex, answerText) {
     setSelectedAnswers(prev => {
       return {
         ...prev,
-        [questionIndex]: answerIndex
+        [questionIndex]: answerText
       }
     })
   }
 
-  function handleCheckAnswer() {
+  function handleCheckAnswer(e) {
+    e.preventDefault()
     const resultsArray = []
 
     questions.forEach((question, index) => {
-      const chosenAnswer = question.answers[selectedAnswers[index]]
+      const chosenAnswer = selectedAnswers[index]
       const correctAnswer = question.correct_answer
       if (chosenAnswer === correctAnswer) {
         resultsArray.push(true)
@@ -94,28 +94,35 @@ export default function QuizPage() {
 
   const questionElements = questions.map((question, questionIndex) => (
     <div key={questionIndex} className="question-element">
-      <p className="question">{question.question}</p>
-      <div className="answers-container">
-        {question.answers.map((answer, answerIndex) => {
+      <fieldset>
+        <legend className="question">{question.question}</legend>
+        {question.answers.map((answer) => {
           const answersClass = clsx("answers", {
-            "is-selected": selectedAnswers[questionIndex] === answerIndex,
+            "is-selected": selectedAnswers[questionIndex] === answer,
             correct: results.length && question.correct_answer === answer,
-            "chosen-incorrect": results.length && selectedAnswers[questionIndex] === answerIndex && question.correct_answer !== answer,
-            incorrect: results.length && selectedAnswers[questionIndex] !== answerIndex && question.correct_answer !== answer
+            "chosen-incorrect": results.length && selectedAnswers[questionIndex] === answer && question.correct_answer !== answer,
+            incorrect: results.length && selectedAnswers[questionIndex] !== answer && question.correct_answer !== answer
           })
 
           return (
-            <button
-              key={answerIndex}
-              className={answersClass}
-              disabled={results.length && answer !== question.correct_answer}
-              onClick={() => handleSelectAnswer(questionIndex, answerIndex)}
-            >
-              {answer}
-            </button>
+            <div key={answer} className="answers-container">
+              <input
+                type="radio"
+                id={`question-${questionIndex}-answer-${answer}`}
+                name={`question-${questionIndex}`}
+                value={answer}
+                onChange={(e) => handleSelectAnswer(questionIndex, e.target.value)}
+              />
+              <label
+                htmlFor={`question-${questionIndex}-answer-${answer}`}
+                className={answersClass}
+              >
+                {answer}
+              </label>
+            </div>
           )
         })}
-      </div>
+      </fieldset>
     </div>
   ))
 
@@ -145,15 +152,17 @@ export default function QuizPage() {
 
   return (
     <div className="content">
-      {questionElements}
-      {results.length === 0 ?
-        <button onClick={() => handleCheckAnswer()} className="btn quiz-button">Check answers</button>
-        :
-        <div className="score-container">
-          <p className="score-text">You scored {score}/{questions.length} correct answers</p>
-          <button onClick={() => handleReset()} className="btn score-button">Play again</button>
-        </div>
-      }
+      <form onSubmit={handleCheckAnswer}>
+        {questionElements}
+        {results.length === 0 ?
+          <button type="submit" className="btn quiz-button" disabled={Object.keys(selectedAnswers).length !== 5}>Check answers</button>
+          :
+          <div className="score-container">
+            <p className="score-text">You scored {score}/{questions.length} correct answers</p>
+            <button onClick={() => handleReset()} className="btn score-button">Play again</button>
+          </div>
+        }
+      </form>
     </div>
   )
 }
