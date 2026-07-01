@@ -58,7 +58,7 @@ body {
 }
 
 .game-description {
-  font-size: 1em;
+  font-size: 1rem;
   margin: 1em 0 2em 0;
 }
 
@@ -89,8 +89,11 @@ button:disabled:hover {
   padding: 18px 55px;
 }
 
-
 /* Quiz Screen */
+
+fieldset:focus {
+  outline: none;
+}
 
 .question-element {
   border: none;
@@ -110,7 +113,7 @@ button:disabled:hover {
   gap: 1em;
 }
 
-.answers-input {
+.visually-hidden {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -145,6 +148,12 @@ button:disabled:hover {
   background-color: #D6DBF5;
 }
 
+.answers.is-selected:hover {
+  transform: none;
+  box-shadow: none;
+  cursor: default;
+}
+
 .answers.correct {
   background-color: #94D7A2;
   border: none;
@@ -162,8 +171,12 @@ button:disabled:hover {
   cursor: not-allowed;
 }
 
-.answers-input:disabled + label {
+input:disabled + label {
   opacity: 50%;
+}
+
+input:focus + label {
+  outline: 2px solid #4D5B9E;
 }
 
 .quiz-button {

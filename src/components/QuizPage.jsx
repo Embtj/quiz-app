@@ -1,6 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import he from "he"
 import clsx from "clsx"
+
+function shuffle(array) {
+  const shuffled = [...array]
+
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+
+  return shuffled
+}
 
 export default function QuizPage() {
 
@@ -14,18 +25,9 @@ export default function QuizPage() {
   // Derived
   const score = results.filter(value => value === true).length
 
-  function shuffle(array) {
-    const shuffled = [...array]
+  // Ref
+  const firstAnswerRef = useRef(null)
 
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-    }
-
-    return shuffled
-  }
-
-  // Get data from api and format it
   async function getQuestions() {
     try {
       setLoading(true)
@@ -40,7 +42,6 @@ export default function QuizPage() {
       }
 
       const data = await res.json()
-      console.log(data)
       const formattedQuestions = data.results.map(question => {
         const correct = he.decode(question.correct_answer)
 
@@ -66,6 +67,11 @@ export default function QuizPage() {
     getQuestions()
   }, [])
 
+  useEffect(() => {
+    if (firstAnswerRef.current) {
+      firstAnswerRef.current.focus()
+    }
+  }, [questions])
 
   function handleSelectAnswer(questionIndex, answerText) {
     setSelectedAnswers(prev => {
@@ -92,9 +98,20 @@ export default function QuizPage() {
     setResults(resultsArray)
   }
 
+  function handleReset() {
+    setQuestions([])
+    setSelectedAnswers({})
+    setResults([])
+    getQuestions()
+  }
+
   const questionElements = questions.map((question, questionIndex) => (
     <div key={questionIndex}>
-      <fieldset className="question-element">
+      <fieldset
+        className="question-element"
+        ref={questionIndex === 0 ? firstAnswerRef : null}
+        tabIndex={-1}
+      >
         <legend className="question">{question.question}</legend>
         <div className="answers-container">
           {question.answers.map((answer) => {
@@ -113,7 +130,7 @@ export default function QuizPage() {
                   value={answer}
                   onChange={(e) => handleSelectAnswer(questionIndex, e.target.value)}
                   disabled={results.length && answer !== question.correct_answer}
-                  className="answers-input"
+                  className="visually-hidden"
                 />
                 <label
                   htmlFor={`question-${questionIndex}-answer-${answer}`}
@@ -129,13 +146,6 @@ export default function QuizPage() {
     </div>
   ))
 
-  function handleReset() {
-    setQuestions([])
-    setSelectedAnswers({})
-    setResults([])
-    getQuestions()
-  }
-
   if (loading) {
     return <p aria-live="polite" className="loading-message content">Loading...</p>
   }
@@ -143,7 +153,7 @@ export default function QuizPage() {
   if (error) {
     return (
       <div className="content">
-        <p aria-live="assertive" className="error-message">{error}</p>
+        <p role="alert" className="error-message">{error}</p>
         <button onClick={() => {
           setError(null)
           getQuestions()
