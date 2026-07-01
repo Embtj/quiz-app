@@ -70,7 +70,8 @@ body {
   cursor: pointer;
 }
 
-button:hover {
+button:hover,
+.answers:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -92,8 +93,9 @@ button:disabled:hover {
 /* Quiz Screen */
 
 .question-element {
-  margin-bottom: 1.5em;
+  border: none;
   border-bottom: 0.79px solid #DBDEF0;
+  margin-bottom: 1.5em;
   width: 100%;
 }
 
@@ -106,6 +108,18 @@ button:disabled:hover {
   display: flex;
   flex-direction: row;
   gap: 1em;
+}
+
+.answers-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .answers {
@@ -122,6 +136,8 @@ button:disabled:hover {
   margin: 1.5em 0;
   min-width: 66px;
   cursor: pointer;
+
+  display: flex;
 }
 
 .answers.is-selected {
@@ -134,19 +150,25 @@ button:disabled:hover {
   border: none;
 }
 
-.answers.correct:hover {
+.answers.chosen-incorrect {
+  background-color: #F8BCBC;
+}
+
+.answers.correct:hover,
+.answers.incorrect:hover,
+.answers.chosen-incorrect:hover{
   transform: none;
   box-shadow: none;
   cursor: not-allowed;
 }
 
-.answers.chosen-incorrect {
-  background-color: #F8BCBC;
+.answers-input:disabled + label {
   opacity: 50%;
 }
 
-.answers:disabled {
-  opacity: 50%;
+.quiz-button {
+  display: block;
+  margin: 0 auto;
 }
 
 .quiz-button,

@@ -93,35 +93,38 @@ export default function QuizPage() {
   }
 
   const questionElements = questions.map((question, questionIndex) => (
-    <div key={questionIndex} className="question-element">
-      <fieldset>
+    <div key={questionIndex}>
+      <fieldset className="question-element">
         <legend className="question">{question.question}</legend>
-        {question.answers.map((answer) => {
-          const answersClass = clsx("answers", {
-            "is-selected": selectedAnswers[questionIndex] === answer,
-            correct: results.length && question.correct_answer === answer,
-            "chosen-incorrect": results.length && selectedAnswers[questionIndex] === answer && question.correct_answer !== answer,
-            incorrect: results.length && selectedAnswers[questionIndex] !== answer && question.correct_answer !== answer
-          })
-
-          return (
-            <div key={answer} className="answers-container">
-              <input
-                type="radio"
-                id={`question-${questionIndex}-answer-${answer}`}
-                name={`question-${questionIndex}`}
-                value={answer}
-                onChange={(e) => handleSelectAnswer(questionIndex, e.target.value)}
-              />
-              <label
-                htmlFor={`question-${questionIndex}-answer-${answer}`}
-                className={answersClass}
-              >
-                {answer}
-              </label>
-            </div>
-          )
-        })}
+        <div className="answers-container">
+          {question.answers.map((answer) => {
+            const answersClass = clsx("answers", {
+              "is-selected": selectedAnswers[questionIndex] === answer,
+              correct: results.length && question.correct_answer === answer,
+              "chosen-incorrect": results.length && selectedAnswers[questionIndex] === answer && question.correct_answer !== answer,
+              incorrect: results.length && selectedAnswers[questionIndex] !== answer && question.correct_answer !== answer
+            })
+            return (
+              <div key={answer}>
+                <input
+                  type="radio"
+                  id={`question-${questionIndex}-answer-${answer}`}
+                  name={`question-${questionIndex}`}
+                  value={answer}
+                  onChange={(e) => handleSelectAnswer(questionIndex, e.target.value)}
+                  disabled={results.length && answer !== question.correct_answer}
+                  className="answers-input"
+                />
+                <label
+                  htmlFor={`question-${questionIndex}-answer-${answer}`}
+                  className={answersClass}
+                >
+                  {answer}
+                </label>
+              </div>
+            )
+          })}
+        </div>
       </fieldset>
     </div>
   ))
